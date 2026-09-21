@@ -1,0 +1,38 @@
+{% load wagtailcore_tags %}
+<section class="section">
+  <div class="container-site">
+    {% if value.heading or value.intro %}
+      <div class="mx-auto max-w-2xl text-center">
+        {% if value.heading %}<h2 class="section-heading text-balance">{{ value.heading }}</h2>{% endif %}
+        {% if value.intro %}<p class="section-intro">{{ value.intro }}</p>{% endif %}
+      </div>
+    {% endif %}
+
+    <ul role="list"
+        class="mt-12 grid gap-6 sm:grid-cols-2
+               {% if value.columns == '2' %}lg:grid-cols-2{% elif value.columns == '4' %}lg:grid-cols-4{% else %}lg:grid-cols-3{% endif %}">
+      {% for card in value.cards %}
+        <li class="card {% if card.link %}card-interactive{% endif %}">
+          <span class="icon-tile">
+            {% include "includes/feature_icon.html" with icon=card.icon %}
+          </span>
+
+          <h3 class="card-title">
+            {% if card.link %}
+              {# Stretched link keeps the whole card clickable without nesting anchors. #}
+              <a href="{{ card.link.href }}" class="after:absolute after:inset-0"
+                 {% if card.link.is_external %}target="_blank" rel="noopener noreferrer"{% endif %}>
+                <span class="absolute inset-0" aria-hidden="true"></span>
+                {{ card.title }}
+              </a>
+            {% else %}
+              {{ card.title }}
+            {% endif %}
+          </h3>
+
+          <p class="card-text">{{ card.text }}</p>
+        </li>
+      {% endfor %}
+    </ul>
+  </div>
+</section>

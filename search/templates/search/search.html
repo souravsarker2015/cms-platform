@@ -1,0 +1,74 @@
+{% extends "base.html" %}
+{% load static wagtailcore_tags %}
+
+{% block title %}Search{% if search_query %}: {{ search_query }}{% endif %}{% endblock %}
+
+{% block content %}
+  <header class="border-b border-secondary-200 bg-secondary-50">
+    <div class="container-site py-14 lg:py-20">
+      <h1 class="text-3xl font-semibold tracking-tight text-secondary-950 sm:text-4xl">Search</h1>
+
+      <form action="{% url 'search' %}" method="get" role="search"
+            class="mt-6 flex max-w-xl gap-2">
+        <label for="search-input" class="sr-only">Search the site</label>
+        <input
+          type="search"
+          id="search-input"
+          name="query"
+          value="{{ search_query|default:'' }}"
+          placeholder="Search pages&hellip;"
+          class="min-h-11 w-full rounded-lg border border-secondary-300 bg-white px-4 py-2.5 text-base text-secondary-900 placeholder:text-secondary-400 focus:border-primary-500"
+        />
+        <button type="submit" class="btn btn-primary">Search</button>
+      </form>
+    </div>
+  </header>
+
+  <div class="section">
+    <div class="container-site">
+      {% if search_results %}
+        <p class="text-sm text-secondary-600" role="status">
+          {{ search_results.paginator.count }} result{{ search_results.paginator.count|pluralize }}
+          for &ldquo;{{ search_query }}&rdquo;
+        </p>
+
+        <ul role="list" class="mt-8 max-w-3xl divide-y divide-secondary-200 border-t border-secondary-200">
+          {% for result in search_results %}
+            <li class="py-6">
+              <h2 class="text-lg font-semibold">
+                <a href="{% pageurl result %}"
+                   class="text-secondary-950 underline-offset-2 hover:text-primary-700 hover:underline">
+                  {{ result }}
+                </a>
+              </h2>
+              {% if result.search_description %}
+                <p class="mt-2 text-sm leading-relaxed text-secondary-600">{{ result.search_description }}</p>
+              {% endif %}
+              <p class="mt-2 text-xs text-secondary-400">{{ result.full_url }}</p>
+            </li>
+          {% endfor %}
+        </ul>
+
+        {# -- Pagination -- #}
+        <nav class="mt-10 flex gap-3" aria-label="Search results pages">
+          {% if search_results.has_previous %}
+            <a class="btn btn-secondary" href="{% url 'search' %}?query={{ search_query|urlencode }}&amp;page={{ search_results.previous_page_number }}">
+              Previous
+            </a>
+          {% endif %}
+          {% if search_results.has_next %}
+            <a class="btn btn-secondary" href="{% url 'search' %}?query={{ search_query|urlencode }}&amp;page={{ search_results.next_page_number }}">
+              Next
+            </a>
+          {% endif %}
+        </nav>
+      {% elif search_query %}
+        <p class="text-secondary-600" role="status">
+          No results for &ldquo;{{ search_query }}&rdquo;. Try a different term.
+        </p>
+      {% else %}
+        <p class="text-secondary-600">Enter a term above to search the site.</p>
+      {% endif %}
+    </div>
+  </div>
+{% endblock %}

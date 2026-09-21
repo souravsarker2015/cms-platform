@@ -1,0 +1,76 @@
+{% load static wagtailcore_tags wagtailimages_tags core_tags %}
+<!DOCTYPE html>
+<html lang="en" class="h-full">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>{% block title %}{% if page %}{{ page.meta_title|default:page.title }}{% endif %}{% endblock %}{% block title_suffix %}{% if settings.core.SiteSettings.company_name %} &middot; {{ settings.core.SiteSettings.company_name }}{% endif %}{% endblock %}</title>
+
+    {% if page.meta_description %}
+      <meta name="description" content="{{ page.meta_description }}" />
+    {% endif %}
+    {% if page.no_index %}
+      <meta name="robots" content="noindex, nofollow" />
+    {% endif %}
+    {% block extra_meta %}{% endblock %}
+
+    {# Canonical URL keeps duplicate paths from splitting ranking. #}
+    {% if page %}<link rel="canonical" href="{{ page.full_url }}" />{% endif %}
+
+    {# -- Open Graph / Twitter -- #}
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="{{ settings.core.SiteSettings.company_name }}" />
+    <meta property="og:title" content="{% block og_title %}{% if page %}{{ page.social_title|default:page.title }}{% else %}{{ settings.core.SiteSettings.company_name }}{% endif %}{% endblock %}" />
+    {% with og_desc=page.social_description %}
+      {% if og_desc %}<meta property="og:description" content="{{ og_desc }}" />{% endif %}
+    {% endwith %}
+    {% if page %}<meta property="og:url" content="{{ page.full_url }}" />{% endif %}
+    {% with og_img=page.social_image|default:settings.core.SiteSettings.default_og_image %}
+      {% if og_img %}
+        {% image og_img fill-1200x630 as og_render %}
+        <meta property="og:image" content="{{ og_render.full_url }}" />
+        <meta property="og:image:width" content="{{ og_render.width }}" />
+        <meta property="og:image:height" content="{{ og_render.height }}" />
+        <meta name="twitter:card" content="summary_large_image" />
+      {% else %}
+        <meta name="twitter:card" content="summary" />
+      {% endif %}
+    {% endwith %}
+
+    {% with favicon=settings.core.SiteSettings.favicon %}
+      {% if favicon %}
+        {% image favicon fill-32x32 as fav %}
+        <link rel="icon" href="{{ fav.url }}" />
+      {% endif %}
+    {% endwith %}
+
+    {# Preload the variable font so headings don't reflow late. #}
+    <link rel="preload" href="{% static 'fonts/inter-variable.woff2' %}" as="font" type="font/woff2" crossorigin />
+
+    <link rel="stylesheet" href="{% static 'css/main.css' %}" />
+
+    {# Alpine needs to be deferred; htmx does not care but defer keeps parsing fast. #}
+    <script src="{% static 'js/htmx.min.js' %}" defer></script>
+    {# Alpine plugins must be loaded before Alpine core. Both deferred, so
+       execution order follows document order. #}
+    <script src="{% static 'js/alpine-collapse.min.js' %}" defer></script>
+    <script src="{% static 'js/alpine.min.js' %}" defer></script>
+
+    {% block extra_head %}{% endblock %}
+  </head>
+
+  <body class="flex min-h-full flex-col {% block body_class %}{% endblock %}">
+    <a class="skip-link" href="#main-content">Skip to main content</a>
+
+    {% include "includes/header.html" %}
+
+    <main id="main-content" class="flex-1">
+      {% block content %}{% endblock %}
+    </main>
+
+    {% include "includes/footer.html" %}
+
+    {% block extra_js %}{% endblock %}
+  </body>
+</html>

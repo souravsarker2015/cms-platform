@@ -1,0 +1,26 @@
+{% load wagtailimages_tags %}
+<section class="section section-muted">
+  <div class="container-site">
+    <figure class="mx-auto max-w-3xl text-center">
+      {% if value.company_logo %}
+        {% image value.company_logo max-160x40 class="mx-auto mb-8 h-8 w-auto opacity-70" %}
+      {% endif %}
+
+      <blockquote class="text-xl font-medium leading-relaxed text-balance text-secondary-900 sm:text-2xl">
+        <p>&ldquo;{{ value.quote }}&rdquo;</p>
+      </blockquote>
+
+      <figcaption class="mt-8 flex items-center justify-center gap-4">
+        {% if value.author_image %}
+          {% image value.author_image fill-56x56 class="h-14 w-14 rounded-full object-cover" %}
+        {% endif %}
+        <div class="text-left">
+          <div class="font-semibold text-secondary-950">{{ value.author_name }}</div>
+          {% if value.author_role %}
+            <div class="text-sm text-secondary-600">{{ value.author_role }}</div>
+          {% endif %}
+        </div>
+      </figcaption>
+    </figure>
+  </div>
+</section>

@@ -1,0 +1,17 @@
+<section class="section">
+  <div class="container-site">
+    {% if value.heading %}
+      <h2 class="section-heading mx-auto max-w-2xl text-center text-balance">{{ value.heading }}</h2>
+    {% endif %}
+
+    <dl class="mt-12 grid gap-8 text-center sm:grid-cols-2
+               {% if value.stats|length == 3 %}lg:grid-cols-3{% elif value.stats|length >= 4 %}lg:grid-cols-4{% endif %}">
+      {% for stat in value.stats %}
+        <div class="flex flex-col-reverse gap-2">
+          <dt class="text-sm font-medium text-secondary-600">{{ stat.label }}</dt>
+          <dd class="text-4xl font-semibold tracking-tight text-primary-700 lg:text-5xl">{{ stat.value }}</dd>
+        </div>
+      {% endfor %}
+    </dl>
+  </div>
+</section>

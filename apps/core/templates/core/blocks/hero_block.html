@@ -1,0 +1,36 @@
+{% load wagtailcore_tags wagtailimages_tags %}
+{% with has_image=value.background_image %}
+<section class="relative isolate overflow-hidden {% if has_image %}bg-secondary-950{% else %}bg-secondary-50{% endif %}">
+  {% if has_image %}
+    {% image value.background_image fill-1920x1080 class="absolute inset-0 -z-10 h-full w-full object-cover" alt="" %}
+    {# Scrim keeps text contrast legible over any photograph. #}
+    <div class="absolute inset-0 -z-10 bg-secondary-950/70" aria-hidden="true"></div>
+  {% endif %}
+
+  <div class="container-site py-20 lg:py-28">
+    <div class="{% if value.alignment == 'center' %}mx-auto max-w-3xl text-center{% else %}max-w-2xl{% endif %}">
+      {% if value.eyebrow %}
+        <span class="eyebrow {% if has_image %}!text-primary-300{% endif %}">{{ value.eyebrow }}</span>
+      {% endif %}
+
+      <h1 class="mt-4 text-4xl font-semibold tracking-tight text-balance sm:text-5xl lg:text-6xl {% if has_image %}text-white{% else %}text-secondary-950{% endif %}">
+        {{ value.heading }}
+      </h1>
+
+      {% if value.subheading %}
+        <p class="mt-6 text-lg leading-relaxed text-pretty {% if has_image %}text-secondary-200{% else %}text-secondary-600{% endif %}">
+          {{ value.subheading }}
+        </p>
+      {% endif %}
+
+      {% if value.buttons %}
+        <div class="mt-9 flex flex-wrap gap-3 {% if value.alignment == 'center' %}justify-center{% endif %}">
+          {% for button in value.buttons %}
+            {% include_block button %}
+          {% endfor %}
+        </div>
+      {% endif %}
+    </div>
+  </div>
+</section>
+{% endwith %}

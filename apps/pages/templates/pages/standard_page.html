@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+{% load wagtailcore_tags wagtailimages_tags %}
+
+{% block body_class %}template-standardpage{% endblock %}
+
+{% block content %}
+  {# -- Page header -- #}
+  {% with header_img=page.header_image %}
+    <header class="relative isolate overflow-hidden {% if header_img %}bg-secondary-950{% else %}bg-secondary-50 border-b border-secondary-200{% endif %}">
+      {% if header_img %}
+        {% image header_img fill-1920x800 class="absolute inset-0 -z-10 h-full w-full object-cover" alt="" %}
+        <div class="absolute inset-0 -z-10 bg-secondary-950/70" aria-hidden="true"></div>
+      {% endif %}
+
+      <div class="container-site py-16 lg:py-24">
+        {# Breadcrumbs give both orientation and internal linking. #}
+        {% if page.get_ancestors.count > 1 %}
+          <nav aria-label="Breadcrumb" class="mb-6">
+            <ol class="flex flex-wrap items-center gap-x-2 gap-y-1 text-sm {% if header_img %}text-secondary-300{% else %}text-secondary-500{% endif %}">
+              {% for ancestor in page.get_ancestors %}
+                {% if not ancestor.is_root %}
+                  <li class="flex items-center gap-2">
+                    <a href="{% pageurl ancestor %}" class="underline-offset-2 hover:underline {% if header_img %}hover:text-white{% else %}hover:text-primary-700{% endif %}">
+                      {{ ancestor.title }}
+                    </a>
+                    <span aria-hidden="true">/</span>
+                  </li>
+                {% endif %}
+              {% endfor %}
+              <li class="{% if header_img %}text-white{% else %}text-secondary-900{% endif %}" aria-current="page">{{ page.title }}</li>
+            </ol>
+          </nav>
+        {% endif %}
+
+        <h1 class="max-w-3xl text-3xl font-semibold tracking-tight text-balance sm:text-4xl lg:text-5xl {% if header_img %}text-white{% else %}text-secondary-950{% endif %}">
+          {{ page.title }}
+        </h1>
+
+        {% if page.intro %}
+          <p class="mt-5 max-w-2xl text-lg leading-relaxed text-pretty {% if header_img %}text-secondary-200{% else %}text-secondary-600{% endif %}">
+            {{ page.intro }}
+          </p>
+        {% endif %}
+      </div>
+    </header>
+  {% endwith %}
+
+  {# -- Body -- #}
+  {% if page.body %}
+    {% include_block page.body %}
+  {% endif %}
+{% endblock %}

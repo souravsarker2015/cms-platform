@@ -1,0 +1,21 @@
+{
+  "name": "endeavours",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Frontend build for the Endeavours Wagtail site",
+  "scripts": {
+    "dev": "tailwindcss -i ./frontend/main.css -o ./endeavours/static/css/main.css --watch",
+    "build": "npm run vendor && tailwindcss -i ./frontend/main.css -o ./endeavours/static/css/main.css --minify",
+    "vendor": "cp node_modules/alpinejs/dist/cdn.min.js endeavours/static/js/alpine.min.js && cp node_modules/@alpinejs/collapse/dist/cdn.min.js endeavours/static/js/alpine-collapse.min.js && cp node_modules/htmx.org/dist/htmx.min.js endeavours/static/js/htmx.min.js"
+  },
+  "devDependencies": {
+    "@tailwindcss/cli": "^4.3.3",
+    "@tailwindcss/typography": "^0.5.20",
+    "tailwindcss": "^4.3.3"
+  },
+  "dependencies": {
+    "@alpinejs/collapse": "^3.17.4",
+    "alpinejs": "^3.17.4",
+    "htmx.org": "^2.0.10"
+  }
+}

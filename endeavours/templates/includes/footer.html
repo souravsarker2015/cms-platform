@@ -1,0 +1,126 @@
+{% load wagtailcore_tags wagtailimages_tags core_tags %}
+{% with site_settings=settings.core.SiteSettings %}
+<footer class="section-inverse mt-auto" aria-labelledby="footer-heading">
+  <h2 id="footer-heading" class="sr-only">Site footer</h2>
+
+  <div class="container-site py-14 lg:py-20">
+    <div class="grid gap-10 lg:grid-cols-[minmax(0,2fr)_minmax(0,3fr)] lg:gap-16">
+
+      {# -- Brand column -- #}
+      <div class="max-w-sm">
+        <a href="/" class="inline-flex items-center gap-2.5"
+           aria-label="{{ site_settings.company_name|default:'Home' }} home">
+          {% if site_settings.logo_dark %}
+            {% image site_settings.logo_dark max-180x48 class="h-9 w-auto" %}
+          {% elif site_settings.logo %}
+            {% image site_settings.logo max-180x48 class="h-9 w-auto" %}
+          {% else %}
+            <span class="grid h-9 w-9 place-items-center rounded-lg bg-primary-600 text-base font-bold text-white">
+              {{ site_settings.company_name|default:"E"|slice:":1" }}
+            </span>
+            <span class="text-lg font-semibold tracking-tight text-white">
+              {{ site_settings.company_name|default:"Endeavours" }}
+            </span>
+          {% endif %}
+        </a>
+
+        {% if site_footer.intro %}
+          <div class="mt-5 text-sm leading-relaxed text-secondary-300">
+            {{ site_footer.intro|richtext }}
+          </div>
+        {% elif site_settings.tagline %}
+          <p class="mt-5 text-sm leading-relaxed text-secondary-300">{{ site_settings.tagline }}</p>
+        {% endif %}
+
+        {# -- Contact -- #}
+        {% if site_settings.contact_email or site_settings.contact_phone or site_settings.address_lines %}
+          <address class="mt-6 space-y-2 text-sm not-italic text-secondary-300">
+            {% if site_settings.address_lines %}
+              <p>
+                {% for line in site_settings.address_lines %}
+                  {{ line }}{% if not forloop.last %}<br />{% endif %}
+                {% endfor %}
+              </p>
+            {% endif %}
+            {% if site_settings.contact_email %}
+              <p>
+                <a class="underline-offset-2 hover:text-white hover:underline"
+                   href="mailto:{{ site_settings.contact_email }}">{{ site_settings.contact_email }}</a>
+              </p>
+            {% endif %}
+            {% if site_settings.contact_phone %}
+              <p>
+                <a class="underline-offset-2 hover:text-white hover:underline"
+                   href="tel:{{ site_settings.contact_phone|cut:' ' }}">{{ site_settings.contact_phone }}</a>
+              </p>
+            {% endif %}
+          </address>
+        {% endif %}
+
+        {# -- Social -- #}
+        {% if site_settings.social_links %}
+          <ul class="mt-6 flex flex-wrap items-center gap-2">
+            {% for link in site_settings.social_links %}
+              <li>
+                <a href="{{ link.url }}" target="_blank" rel="noopener noreferrer"
+                   class="inline-flex h-10 w-10 items-center justify-center rounded-lg border border-white/15 text-secondary-300 transition hover:border-white/40 hover:text-white">
+                  <span class="sr-only">{{ link.name }}</span>
+                  {% include "includes/social_icon.html" with icon=link.icon %}
+                </a>
+              </li>
+            {% endfor %}
+          </ul>
+        {% endif %}
+      </div>
+
+      {# -- Link columns -- #}
+      {% if site_footer %}
+        <div class="grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
+          {% for column in site_footer.columns.all %}
+            <div>
+              <h3 class="text-sm font-semibold tracking-wide text-white">{{ column.heading }}</h3>
+              <ul class="mt-4 space-y-3">
+                {% for link in column.links.all %}
+                  <li>
+                    <a href="{{ link.link_url }}"
+                       class="text-sm text-secondary-300 underline-offset-2 transition hover:text-white hover:underline"
+                       {% if link.is_external %}target="_blank" rel="noopener noreferrer"{% endif %}>
+                      {{ link.link_title }}
+                    </a>
+                  </li>
+                {% endfor %}
+              </ul>
+            </div>
+          {% endfor %}
+        </div>
+      {% endif %}
+    </div>
+
+    {# -- Bottom bar -- #}
+    <div class="mt-12 flex flex-col gap-4 border-t border-white/10 pt-8 sm:flex-row sm:items-center sm:justify-between">
+      <p class="text-sm text-secondary-400">
+        &copy; {% current_year %}
+        {% if site_footer.copyright_text %}
+          {{ site_footer.copyright_text }}
+        {% else %}
+          {{ site_settings.company_name|default:"Endeavours" }}. All rights reserved.
+        {% endif %}
+      </p>
+
+      {% if site_footer.legal_links.all %}
+        <ul class="flex flex-wrap gap-x-6 gap-y-2">
+          {% for link in site_footer.legal_links.all %}
+            <li>
+              <a href="{{ link.link_url }}"
+                 class="text-sm text-secondary-400 underline-offset-2 transition hover:text-white hover:underline"
+                 {% if link.is_external %}target="_blank" rel="noopener noreferrer"{% endif %}>
+                {{ link.link_title }}
+              </a>
+            </li>
+          {% endfor %}
+        </ul>
+      {% endif %}
+    </div>
+  </div>
+</footer>
+{% endwith %}

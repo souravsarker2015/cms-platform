@@ -1,0 +1,20 @@
+line-length = 100
+target-version = "py312"
+
+exclude = [
+    ".venv",
+    "migrations",
+]
+
+[lint]
+select = ["E", "F", "I", "UP", "B", "DJ", "RUF"]
+ignore = [
+    # Wagtail/Django inner `Meta` classes are declarative config, not mutable
+    # instance state, so dict/list attributes there are intentional.
+    "RUF012",
+    # Long lines in strings (help_text) are acceptable.
+    "E501",
+]
+
+[lint.per-file-ignores]
+"endeavours/settings/*.py" = ["F403", "F405"]

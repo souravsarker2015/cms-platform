@@ -1,0 +1,23 @@
+{% load wagtailcore_tags %}
+<section class="section">
+  <div class="container-site">
+    <div class="rounded-2xl px-6 py-14 text-center sm:px-12
+                {% if value.style == 'muted' %}bg-secondary-50 border border-secondary-200{% else %}section-inverse bg-secondary-950{% endif %}">
+      <h2 class="section-heading text-balance {% if value.style != 'muted' %}text-white{% endif %}">
+        {{ value.heading }}
+      </h2>
+
+      {% if value.text %}
+        <p class="section-intro mx-auto max-w-2xl {% if value.style != 'muted' %}text-secondary-300{% endif %}">
+          {{ value.text }}
+        </p>
+      {% endif %}
+
+      <div class="mt-8 flex flex-wrap justify-center gap-3">
+        {% for button in value.buttons %}
+          {% include_block button %}
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+</section>

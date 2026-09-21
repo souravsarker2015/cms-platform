@@ -1,0 +1,11 @@
+-r base.txt
+
+# Debugging
+django-debug-toolbar==8.0.0
+
+# Code quality
+ruff==0.16.8
+
+# Testing
+pytest==9.1.1
+pytest-django==4.14.0

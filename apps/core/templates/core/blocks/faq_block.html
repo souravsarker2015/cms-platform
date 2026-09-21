@@ -1,0 +1,50 @@
+{% load wagtailcore_tags %}
+{# Accordion. Alpine owns the open state; each panel is linked to its button
+   via aria-controls/aria-labelledby so screen readers follow along. #}
+<section class="section">
+  <div class="container-site">
+    <div class="mx-auto max-w-3xl">
+      {% if value.heading %}
+        <h2 class="section-heading text-center text-balance">{{ value.heading }}</h2>
+      {% endif %}
+
+      <div class="mt-10 divide-y divide-secondary-200 border-y border-secondary-200"
+           x-data="{ active: null }">
+        {% for item in value.items %}
+          <div class="py-1">
+            <h3>
+              <button
+                type="button"
+                id="faq-q-{{ uid }}-{{ forloop.counter0 }}"
+                class="flex w-full items-center justify-between gap-4 py-5 text-left"
+                @click="active = active === {{ forloop.counter0 }} ? null : {{ forloop.counter0 }}"
+                :aria-expanded="active === {{ forloop.counter0 }} ? 'true' : 'false'"
+                aria-controls="faq-a-{{ uid }}-{{ forloop.counter0 }}"
+              >
+                <span class="text-base font-semibold text-secondary-950">{{ item.question }}</span>
+                <svg class="h-5 w-5 shrink-0 text-secondary-500 transition-transform duration-200"
+                     :class="active === {{ forloop.counter0 }} && 'rotate-45'"
+                     fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor" aria-hidden="true">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
+                </svg>
+              </button>
+            </h3>
+
+            <div
+              id="faq-a-{{ uid }}-{{ forloop.counter0 }}"
+              role="region"
+              aria-labelledby="faq-q-{{ uid }}-{{ forloop.counter0 }}"
+              x-show="active === {{ forloop.counter0 }}"
+              x-cloak
+              x-collapse
+            >
+              <div class="prose prose-site pb-5 text-secondary-600">
+                {{ item.answer|richtext }}
+              </div>
+            </div>
+          </div>
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+</section>

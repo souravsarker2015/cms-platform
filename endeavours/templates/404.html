@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+
+{% block title %}Page not found{% endblock %}
+
+{% block content %}
+  <section class="section">
+    <div class="container-site">
+      <div class="mx-auto max-w-xl py-12 text-center">
+        <p class="eyebrow">Error 404</p>
+        <h1 class="mt-4 text-4xl font-semibold tracking-tight text-secondary-950 sm:text-5xl">
+          We couldn't find that page
+        </h1>
+        <p class="mt-5 text-lg text-secondary-600">
+          The page may have moved, or the link might be out of date.
+        </p>
+        <div class="mt-9 flex flex-wrap justify-center gap-3">
+          <a href="/" class="btn btn-primary">Back to home</a>
+          <a href="/search/" class="btn btn-secondary">Search the site</a>
+        </div>
+      </div>
+    </div>
+  </section>
+{% endblock %}

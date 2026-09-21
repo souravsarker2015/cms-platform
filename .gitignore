@@ -216,3 +216,35 @@ __marimo__/
 
 # Streamlit
 .streamlit/secrets.toml
+
+# ---- Project specific ----
+# Real environment files never get committed. Only .env.example is tracked.
+.env
+.env.*
+!.env.example
+*.sqlite3
+staging.sqlite3
+/media/
+/staticfiles/
+
+# Database dumps and backups
+*.sql
+*.dump
+*.sql.gz
+
+# Compiled stylesheet (built via `make css`)
+/endeavours/static/css/main.css
+
+# Vendored JS (copied from node_modules via `npm run vendor`)
+/endeavours/static/js/alpine.min.js
+/endeavours/static/js/alpine-collapse.min.js
+/endeavours/static/js/htmx.min.js
+
+# Node
+node_modules/
+
+# Editors
+.vscode/
+.idea/
+*.swp
+.DS_Store

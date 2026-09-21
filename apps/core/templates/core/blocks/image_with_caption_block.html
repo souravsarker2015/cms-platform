@@ -1,0 +1,21 @@
+{% load wagtailimages_tags %}
+<figure class="section !py-10">
+  <div class="{% if value.width == 'full' %}w-full{% else %}container-site{% endif %}">
+    <div class="{% if value.width == 'standard' %}mx-auto max-w-3xl{% elif value.width == 'wide' %}mx-auto max-w-5xl{% endif %}">
+      {% if value.width == 'full' %}
+        {% image value.image width-2400 class="w-full rounded-none" %}
+      {% else %}
+        {% image value.image width-1600 class="w-full rounded-xl shadow-md" %}
+      {% endif %}
+
+      {% if value.caption or value.attribution %}
+        <figcaption class="mt-3 text-sm text-secondary-500">
+          {{ value.caption }}
+          {% if value.attribution %}
+            <span class="text-secondary-400">&mdash; {{ value.attribution }}</span>
+          {% endif %}
+        </figcaption>
+      {% endif %}
+    </div>
+  </div>
+</figure>

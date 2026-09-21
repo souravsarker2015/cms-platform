@@ -1,0 +1,73 @@
+{% extends "base.html" %}
+{% load wagtailcore_tags wagtailimages_tags %}
+
+{% block body_class %}template-homepage{% endblock %}
+
+{% block content %}
+  {# -- Hero -- #}
+  {% with hero_img=page.hero_image %}
+    <section class="relative isolate overflow-hidden {% if hero_img %}bg-secondary-950{% else %}bg-secondary-50{% endif %}">
+      {% if hero_img %}
+        {% image hero_img fill-1920x1080 class="absolute inset-0 -z-10 h-full w-full object-cover" alt="" %}
+        <div class="absolute inset-0 -z-10 bg-secondary-950/70" aria-hidden="true"></div>
+      {% else %}
+        {# Subtle brand wash when no image is set, so the hero never looks bare. #}
+        <div class="absolute inset-0 -z-10 bg-gradient-to-br from-primary-50 via-secondary-50 to-white" aria-hidden="true"></div>
+      {% endif %}
+
+      <div class="container-site py-20 lg:py-32">
+        <div class="max-w-3xl">
+          {% if page.hero_eyebrow %}
+            <span class="eyebrow {% if hero_img %}!text-primary-300{% endif %}">{{ page.hero_eyebrow }}</span>
+          {% endif %}
+
+          <h1 class="mt-4 text-4xl font-semibold tracking-tight text-balance sm:text-5xl lg:text-6xl {% if hero_img %}text-white{% else %}text-secondary-950{% endif %}">
+            {{ page.heading }}
+          </h1>
+
+          {% if page.hero_subheading %}
+            <p class="mt-6 max-w-2xl text-lg leading-relaxed text-pretty sm:text-xl {% if hero_img %}text-secondary-200{% else %}text-secondary-600{% endif %}">
+              {{ page.hero_subheading }}
+            </p>
+          {% endif %}
+
+          {% if page.hero_buttons %}
+            <div class="mt-10 flex flex-wrap gap-3">
+              {% for block in page.hero_buttons %}
+                {% include_block block %}
+              {% endfor %}
+            </div>
+          {% endif %}
+        </div>
+      </div>
+    </section>
+  {% endwith %}
+
+  {# -- Body -- #}
+  {% if page.body %}
+    {% include_block page.body %}
+  {% endif %}
+
+  {# -- Closing call to action -- #}
+  {% if page.has_cta %}
+    <section class="section">
+      <div class="container-site">
+        <div class="section-inverse rounded-2xl bg-secondary-950 px-6 py-14 text-center sm:px-12">
+          <h2 class="section-heading text-balance text-white">{{ page.cta_heading }}</h2>
+
+          {% if page.cta_text %}
+            <p class="section-intro mx-auto max-w-2xl text-secondary-300">{{ page.cta_text }}</p>
+          {% endif %}
+
+          {% if page.cta_buttons %}
+            <div class="mt-8 flex flex-wrap justify-center gap-3">
+              {% for block in page.cta_buttons %}
+                {% include_block block %}
+              {% endfor %}
+            </div>
+          {% endif %}
+        </div>
+      </div>
+    </section>
+  {% endif %}
+{% endblock %}
