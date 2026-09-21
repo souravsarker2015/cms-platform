@@ -52,8 +52,7 @@
 
     {# Alpine needs to be deferred; htmx does not care but defer keeps parsing fast. #}
     <script src="{% static 'js/htmx.min.js' %}" defer></script>
-    {# Alpine plugins must be loaded before Alpine core. Both deferred, so
-       execution order follows document order. #}
+    {# Alpine plugins load before Alpine core; defer keeps that order. #}
     <script src="{% static 'js/alpine-collapse.min.js' %}" defer></script>
     <script src="{% static 'js/alpine.min.js' %}" defer></script>
 
